@@ -1,6 +1,6 @@
 # CarForMe
 
-## Milestones
+## Milestones By Week
 1. Data processed and Stored in Neo4J database
 2. Basic back-end deployed | Front-end Application Designed & Begin Development
 3. Back-end Application Ready
