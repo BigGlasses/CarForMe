@@ -13,8 +13,8 @@
 6. [ ] Final Front and Back-End Deployment
 
 ## Roles
-@BigGlasses Brandon Project Leader
-@Apockira Allen Tester
-@tonyreigns Anthony Coder
-@miktimes148 Mikolaj Coder
-@AutumnClouds Alex Documenter
+- Brandon @BigGlasses Brandon Project Leader
+- Allen @Apockira Allen Tester
+- Anthony @tonyreigns Anthony Coder
+- Mikolaj @miktimes148 Mikolaj Coder
+- [ ] Alex @AutumnClouds Alex Documenter
