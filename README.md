@@ -7,3 +7,10 @@
 4. [ ] Front-End Deployed
 5. [ ] Final Bug Fixes, No New Features
 6. [ ] Final Front and Back-End Deployment
+
+## Roles
+@BigGlasses Project Leader
+@Allen Tester
+@Anthony Coder
+@Mikolaj Coder
+@Alex Documenter
