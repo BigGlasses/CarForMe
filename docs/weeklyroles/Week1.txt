@@ -1,3 +1,6 @@
+This week:
+We must submit requirements by Friday.
+
 Alex
 Figure out what hosting services will allow us to use SpringBoot.
 
