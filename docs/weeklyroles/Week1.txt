@@ -1,14 +1,16 @@
 Alex
-
+Figure out what hosting services will allow us to use SpringBoot.
 
 Anthony
+Write Java code that: Creates JSON object and does a POST request to some URL.
 
-
-Brandon
-
+Brandon 
+Parse data from database
 
 Mikolaj
-
+Draw what the website might look like. (Draw links between pages etc.)
+Consider how results will be presented to the user.
 
 Zhiwen
-
+Draw what the website might look like. (Draw links between pages etc.)
+Consider how results will be presented to the user.
