@@ -9,7 +9,7 @@ import java.util.*;
 
 class POSTtool {
 	public static void main(String[] args) throws Exception {
-		URL url = new URL("https://marketplace.tf/api/Seller/SetItemPrice/v1/");
+		URL url = new URL("https://website.com");
 		Map<String, Object> params = new LinkedHashMap<>();
 		params.put("param1","12345");
 		params.put("param2", "abcd");
