@@ -5,7 +5,7 @@
 2. Aggregate data from data sets and API
 
 ## Milestones By Week
-1. [ ] Data processed and Stored in Neo4J database
+1. [x] Data processed and Stored in txt file.
 2. [ ] Basic back-end deployed | Front-end Application Designed & Begin Development
 3. [ ] Back-end Application Ready
 4. [ ] Front-End Deployed
@@ -17,4 +17,4 @@
 - Allen @Apockira Allen Tester
 - Anthony @tonyreigns Anthony Coder
 - Mikolaj @miktimes148 Mikolaj Coder
-- [ ] Alex @AutumnClouds Alex Documenter
+- Alex @AutumnClouds Alex Documenter
