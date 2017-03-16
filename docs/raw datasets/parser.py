@@ -26,7 +26,7 @@ class vehicle:
 	def addData(self, carData = None):
 		self.dataCount += 1
 	def __str__(self):
-		return "%s %s %s %i"%(self.model, self.fuelType, self.fuelType1, self.dataCount)
+		return "%s,%s,%s,%i"%(self.model, self.make, self.fuelType, self.dataCount)
 
 
 def compareVehicle(v, model, make, fuelType, fuelType1):
@@ -120,5 +120,7 @@ with open('data.csv', 'rb') as csvfile:
 		print len(allVehicles)
 
 
+w = open("parsed.txt", "w")
 for v in allVehicles:
+	w.write(v.__str__() + "\n")
 	print v
