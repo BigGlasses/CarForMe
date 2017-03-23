@@ -1,18 +1,22 @@
-package Objects;
+package objects;
 
-import static org.hamcrest.CoreMatchers.startsWith;
+
+import java.util.Random;
 
 public class Vehicle {
 	public String model;
 	public String make;
 	public String fuelType;
 	public String fuelType1;
+	public double cost;
 
 	public Vehicle(String model, String make, String fuelType) {
 		this.model = model;
 		this.make = make;
 		this.fuelType = fuelType;
 		this.fuelType1 = "";
+		Random r = new Random();
+		this.cost = 1000 + r.nextInt(4000);
 	}
 	
 	public Vehicle(VehicleDataPoint v) {
@@ -20,6 +24,8 @@ public class Vehicle {
 		this.make = v.make;
 		this.fuelType = v.fuelType;
 		this.fuelType1 = v.fuelType1;
+		Random r = new Random();
+		this.cost = 1000 + r.nextInt(4000);
 		this.addData(v);
 	}
 
@@ -27,9 +33,6 @@ public class Vehicle {
 		
 	}
 
-	public boolean belongs(VehicleDataPoint v) {
-		return false;	
-	}
 
 	public int compareTo(Vehicle v) {
 		if (greater(v.model, this.model.toLowerCase()))
@@ -54,6 +57,11 @@ public class Vehicle {
 		} else
 			return -1;
 	}
+	public String toString(){
+		return String.format("%s %s %s %.2f", this.make, this.model, this.fuelType1,this.cost);
+		
+	}
+	
 	public int compareTo(VehicleDataPoint v) {
 		if (greater(v.model, this.model.toLowerCase()) && !v.model.equals(""))
 			return 1;
