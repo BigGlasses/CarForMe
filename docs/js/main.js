@@ -19,11 +19,19 @@ function ValidateForm() {
     }
 }
 function printCars() {
-
-    document.write(SelectedRows[0].manufacturer + "   -   " + SelectedRows[0].model + "   -   " + SelectedRows[0].cost + "   -   " + SelectedRows[0].gasPY + "<img src='https://images.honda.ca/models/H/Models/2017/accord_sedan/touring_v6_10393_240white_orchid_pearl_front.png?width=500' height=\"200\" width=\"200\"/>");
-    document.write(SelectedRows[1].manufacturer + "   -   " + SelectedRows[1].model + "   -   " + SelectedRows[1].cost + "   -   " + SelectedRows[1].gasPY + "<img src='https://images.honda.ca/models/H/Models/2017/accord_sedan/touring_v6_10393_240white_orchid_pearl_front.png?width=500' height=\"200\" width=\"200\"/>");
-    document.write(SelectedRows[2].manufacturer + "   -   " + SelectedRows[2].model + "   -   " + SelectedRows[2].cost + "   -   " + SelectedRows[2].gasPY + "<img src='https://images.honda.ca/models/H/Models/2017/accord_sedan/touring_v6_10393_240white_orchid_pearl_front.png?width=500' height=\"200\" width=\"200\"/>");
-
+    var manufacturer = document.forms["myForm"]["manufacturer"].value;
+    var budget = document.forms["myForm"]["budget"].value;
+    var KMdriven = document.forms["myForm"]["KMdriven"].value;
+    $.getJSON("http://localhost:8080/vehicles/search?budget="+ budget + "&manufacturer=" + manufacturer, function(data) {
+    data.forEach(function(data){
+    document.write(data.model + " " +  data.make);
+    document.write("------");
+});
+    //data is the JSON string
+});
+    //document.write(SelectedRows[0].manufacturer + "   -   " + SelectedRows[0].model + "   -   " + SelectedRows[0].cost + "   -   " + SelectedRows[0].gasPY + "<img src='https://images.honda.ca/models/H/Models/2017/accord_sedan/touring_v6_10393_240white_orchid_pearl_front.png?width=500' height=\"200\" width=\"200\"/>");
+    //document.write(SelectedRows[1].manufacturer + "   -   " + SelectedRows[1].model + "   -   " + SelectedRows[1].cost + "   -   " + SelectedRows[1].gasPY + "<img src='https://images.honda.ca/models/H/Models/2017/accord_sedan/touring_v6_10393_240white_orchid_pearl_front.png?width=500' height=\"200\" width=\"200\"/>");
+    //document.write(SelectedRows[2].manufacturer + "   -   " + SelectedRows[2].model + "   -   " + SelectedRows[2].cost + "   -   " + SelectedRows[2].gasPY + "<img src='https://images.honda.ca/models/H/Models/2017/accord_sedan/touring_v6_10393_240white_orchid_pearl_front.png?width=500' height=\"200\" width=\"200\"/>");
 
 }
 

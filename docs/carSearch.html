@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Tony's Project</title>
+
+
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="default.css" />
+
+</head>
+<body>
+    <div id="container"></div>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js'></script>
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/main.js"></script>
+
+    
+    <form enctype="multipart/form-data" name="myForm" onsubmit="return printCars()" method="post">
+
+       
+
+        Manufacturer: <select id="manufacturer" name="manufacturer">
+            <option value="">-Select a Manufacturer-</option>
+            <option value="Acura">Acura</option>
+            <option value="Audi">Audi</option>
+            <option value="Buick">Buick</option>
+            <option value="Ford">Buick</option>
+            <p>
+            <option value="Honda">Honda</option>
+            <p>
+        </select><p>
+
+       Budget($): <input name="budget" type="text" size="10" maxlength="10"><br>
+       Driving Amount(km): <input name="KMdriven" type="text" size="10" maxlength="10" value="0"><br>
+           
+
+                     
+
+
+    </form>
+    <input id="clickMe" type="button" value="clickme" onclick="printCars();" />
+
+        
+
+    
+
+
+</body>
+</html>
