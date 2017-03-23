@@ -1,52 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>CarForMe</title>
-    <!-- Latest compiled and minified CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <script src="js/jquery-3.1.1.min.js"></script>
+    <title>Tony's Project</title>
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.nicescroll.min.js"></script>
 
-    <script src="https://unpkg.com/react@latest/dist/react.js"></script>
-    <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
-    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="default.css" />
 
 </head>
-<body style="background: aliceblue">
-    <nav class="navbar navbar-fixed-top">
-        <div class="container">
+<body>
+    <div id="container"></div>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js'></script>
+    <script src="js/main.js"></script>
+
+    
+    <form enctype="multipart/form-data" name="myForm" action="display.html" onsubmit="return ValidateForm()" method="post">
+
+       
+
+        Manufacturer: <select id="selectmonth" name="manufacturer">
+            <option value="">-Select a Manufacturer-</option>
+            <option value="Acura">Acura</option>
+            <option value="Audi">Audi</option>
+            <option value="Buick">Buick</option>
+            <p>
+            <option value="Honda">Honda</option>
+            <p>
+        </select><p>
+
+       Budget($): <input name="budget" type="text" size="10" maxlength="10"><br>
+       Driving Amount(km): <input name="KMdriven" type="text" size="10" maxlength="10" value="0"><br>
+           
+            <input name="send_car" type="submit" value="submit">
+
+                     
 
 
-        </div>
-    </nav>
-    <div class="container">
-        <div class="col-md-12" style = "text-align: center;" class="page-header">
-         <h1 style = "font-weight: bold; font-size: 72px">CarForMe</h1>
-        </div>
-        <div class="col-md-4" style = "text-align: center;   border-radius: 10px;
-            background-color: white;
-            margin-top: 20px;
-            padding: 10px;" id="WeeklyDiv">
-        <h3>Weekly Roles</h3>
-        <a href="weeklyroles/Week1.txt">Week 1 (March 4 - 11)<br /></a>
-        <a href="weeklyroles/Week2.txt">Week 2 (March 12 - 19)<br /></a>
-        <a href="weeklyroles/Week3.txt">Week 2 (March 20 - 27)<br /></a>
-        </div>
-        <div class="col-md-7 col-md-offset-1" style = "text-align: center;   border-radius: 10px;
-            background-color: white;
-            margin-top: 20px;
-            padding: 10px;" id="WeeklyDiv">
-        <h3>News</h3>
-        <p>Preliminary Back-end and Front-end being implemented!</p>
-        </div>
-    </div>
-    <script src="js/index.js"></script>
+    </form>
+        
+
+    
+
+
 </body>
 </html>
