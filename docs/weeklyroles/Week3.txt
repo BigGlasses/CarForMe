@@ -1,14 +1,14 @@
 Alex
-
+Finish Logo
 
 Anthony
-
+We'll talk on tuesday, but basically you will implement Alex's designs
 
 Brandon
-
+Implement car graph.
 
 Mikolaj
-
+Meeting minutes etc.
 
 Zhiwen
-
+Testing next week.
