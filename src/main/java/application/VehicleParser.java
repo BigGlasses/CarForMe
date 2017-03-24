@@ -1,5 +1,7 @@
 package application;
-
+/**
+ * Used to read from the CSV files and create a list of Vehicle objects.
+ */
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -11,6 +13,10 @@ import objects.VehicleDataPoint;
 public class VehicleParser {
 	public static ArrayList<Vehicle> allVehicles;
 
+	/**
+	 * Reads the file and puts the Vehicles into an ordered list.
+	 * @throws FileNotFoundException Throws if parse.txt doesn't exist.
+	 */
 	public static void init() throws FileNotFoundException {
 		allVehicles = new ArrayList<Vehicle>();
 		FileReader n = new FileReader("parsed.txt");
@@ -22,7 +28,7 @@ public class VehicleParser {
 			String make = lineReader.next();
 			String fuel = lineReader.next();
 			VehicleDataPoint v = new VehicleDataPoint(model, make, fuel);
-			searchVehicles(v);
+			addVehicle(v);
 			lineReader.close();
 		}
 		carReader.close();
@@ -33,7 +39,12 @@ public class VehicleParser {
 		}
 	}
 
-	public static void searchVehicles(VehicleDataPoint v) {
+	/**
+	 * Adds a vehicle to the list, using a binary insertion.
+	 * If the vehicle is already in the list, the VehicleDataPoint is instead added to the Vehicle.
+	 * @param v Vehicle data point to add.
+	 */
+	public static void addVehicle(VehicleDataPoint v) {
 		int lo = 0;
 		int hi = allVehicles.size() - 1;
 		int cp = 1;
@@ -62,6 +73,11 @@ public class VehicleParser {
 		}
 	}
 
+	/**
+	 * Finds the index of a Vehicle using a binary search.
+	 * @param v VehicleDataPoint to look for.
+	 * @return Index of Vehicle.
+	 */
 	public static int searchVehiclesIndex(VehicleDataPoint v) {
 		int lo = 0;
 		int hi = allVehicles.size() - 1;

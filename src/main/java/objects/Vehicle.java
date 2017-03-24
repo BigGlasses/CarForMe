@@ -9,7 +9,8 @@ public class Vehicle {
 	public String fuelType;
 	public String fuelType1;
 	public double cost;
-
+	public double kmPerLiter;
+	
 	public Vehicle(String model, String make, String fuelType) {
 		this.model = model;
 		this.make = make;
@@ -17,6 +18,7 @@ public class Vehicle {
 		this.fuelType1 = "";
 		Random r = new Random();
 		this.cost = 1000 + r.nextInt(4000);
+		this.kmPerLiter = (7000 + r.nextInt(4000))/(1000*100); // Gives a random km per liter
 	}
 	
 	public Vehicle(VehicleDataPoint v) {
@@ -26,6 +28,7 @@ public class Vehicle {
 		this.fuelType1 = v.fuelType1;
 		Random r = new Random();
 		this.cost = 1000 + r.nextInt(4000);
+		this.kmPerLiter = (7000 + r.nextInt(4000))/(1000*100); // Gives a random km per liter
 		this.addData(v);
 	}
 
