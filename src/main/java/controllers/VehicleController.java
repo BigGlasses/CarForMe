@@ -23,7 +23,11 @@ import objects.VehicleNode;
 public class VehicleController {
 
 	private Random dice = new Random();
-
+	/**
+	 * Returns a random vehicle from the data set.
+	 * @param name
+	 * @return
+	 */
 	@RequestMapping(value = "/randomVehicle", method = RequestMethod.GET)
 	public @ResponseBody Vehicle randomVehicle(
 			@RequestParam(value = "name", required = false, defaultValue = "Stranger") String name) {
@@ -31,6 +35,14 @@ public class VehicleController {
 		return v;
 	}
 
+	/**
+	 * Performs a breadth first search for a Vehicle using the VehicleDiGraph.
+	 * @param manufacturer Car manufacturer
+	 * @param model Car model
+	 * @param budget Money to spend
+	 * @param travelDistance Kilometers traveled per week
+	 * @return List of maximum 10 most suited vehicles.
+	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public @ResponseBody Vehicle[] search(
 			@RequestParam(value = "manufacturer", required = false, defaultValue = "") String manufacturer,
@@ -55,36 +67,25 @@ public class VehicleController {
 
 	}
 
-	@RequestMapping(value = "/connections", method = RequestMethod.GET)
-	public @ResponseBody String[] conn() {
-		Vehicle v = new Vehicle("", "", "");
-		VehicleNode vn = VehicleDiGraph.createVehicle(v);
-		ArrayList<Node> f = (ArrayList) vn.getConnections();
-		int size = f.size();
-		for (int i = 0; i < size; i++) {
-			for (Node n : f.get(i).getConnections())
-				f.add(n);
-		}
+	/**
+	 * Returns all the connections for a given Field in VehicleDiGraph name.
+	 * @param fieldName String of field to get connections of.
+	 * @return List of connections.
+	 */
+	@RequestMapping(value = "/connections",
+			method = RequestMethod.GET)
+	public @ResponseBody String[] conn(@RequestParam(value = "field", required = false, defaultValue = "") String fieldName) {
+		ArrayList<Node> f = (ArrayList) VehicleDiGraph.getNode(fieldName).getConnections();
 		String[] vl = new String[f.size()];
 
 		for (int i = 0; i < f.size(); i++) {
 			vl[i] = f.get(i).getName();
 		}
 		System.out.println(f.size());
-		VehicleDiGraph.disconnectAll(vn);
 		return vl;
 
 		// return
 		// VehicleParser.allVehicles.get(VehicleParser.searchVehiclesIndex(v)%VehicleParser.allVehicles.size());
 	}
-
-	/**
-	 * @RequestMapping(value = "/bye", method=RequestMethod.GET)
-	 *                       public @ResponseBody Greeting
-	 *                       sayBye(@RequestParam(value="name", required=false,
-	 *                       defaultValue="Sdtranger") String name) { return new
-	 *                       Greeting(counter.incrementAndGet(),
-	 *                       String.format(template, name)); }
-	 **/
 
 }
