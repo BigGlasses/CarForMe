@@ -11,6 +11,12 @@ public class Vehicle {
 	public double cost;
 	public double kmPerLiter;
 	
+	/**
+	 * C
+	 * @param model
+	 * @param mak 
+	 * @param fuelType
+	 */
 	public Vehicle(String model, String make, String fuelType) {
 		this.model = model;
 		this.make = make;
@@ -21,14 +27,12 @@ public class Vehicle {
 		this.kmPerLiter = (7000 + r.nextInt(4000))/(1000*100); // Gives a random km per liter
 	}
 	
+	/**
+	 * Constructs a Vehicle from a VehicleDataPoint, copying its attributes.
+	 * @param v
+	 */
 	public Vehicle(VehicleDataPoint v) {
-		this.model = v.model;
-		this.make = v.make;
-		this.fuelType = v.fuelType;
-		this.fuelType1 = v.fuelType1;
-		Random r = new Random();
-		this.cost = 1000 + r.nextInt(4000);
-		this.kmPerLiter = (7000 + r.nextInt(4000))/(1000*100); // Gives a random km per liter
+		this(v.model, v.make, v.fuelType);
 		this.addData(v);
 	}
 

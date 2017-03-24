@@ -9,15 +9,30 @@ public class FieldNode extends Node implements Comparable {
 		super(s.toLowerCase());
 
 	}
-
+	
+	/**
+	 * Compares the name's of the FieldNodes
+	 * @param f
+	 * @return
+	 */
 	public int compareTo(FieldNode f) {
 		return this.name.compareTo(f.getName());
 	}
 
+	/**
+	 * Checks if the String is equal to this Node's identifier.
+	 * @param f
+	 * @return
+	 */
 	public boolean equals(FieldNode f) {
 		return this.name.equals(f.getName());
 	}
 
+	/**
+	 * Checks if the String is equal to this Node's identifier.
+	 * @param f
+	 * @return
+	 */
 	public boolean equals(String s) {
 		return this.name.equals(s.toLowerCase());
 	}
