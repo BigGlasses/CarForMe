@@ -7,9 +7,9 @@ public class VehicleDataPoint {
 	public String fuelType1;
 
 	public VehicleDataPoint(String model, String make, String fuelType) {
-		this.model = model;
-		this.make = make;
-		this.fuelType = fuelType;
+		this.model = model.toLowerCase();
+		this.make = make.toLowerCase();
+		this.fuelType = fuelType.toLowerCase();
 		this.fuelType1 = "";
 	}
 }

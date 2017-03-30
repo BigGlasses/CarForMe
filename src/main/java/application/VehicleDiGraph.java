@@ -29,6 +29,7 @@ public class VehicleDiGraph {
 
 	private static FieldNode addField(String s) {
 		FieldNode n = new FieldNode(s.toLowerCase());
+		System.out.println("Added Field: " + s.toLowerCase());
 		fieldDictionary.put(s.toLowerCase(), n);
 		return n;
 	}
@@ -71,9 +72,11 @@ public class VehicleDiGraph {
 
 		// Remove all that do not match hard fields.
 		for (String s : hardFields) {
-			FieldNode n = VehicleDiGraph.getNode(s);
+			FieldNode n = VehicleDiGraph.getNode(s.toLowerCase());
+			System.out.println(s);
+			System.out.println(n);
 			// This is sequential
-			VehicleTrail.removeIf(p -> !n.getConnections().contains(p));
+			VehicleTrail.removeIf(p -> !n.checkVehicleChild(p));
 		}
 		VehicleNode [] a = new VehicleNode [VehicleTrail.size()];
 		VehicleNode [] vehiclesPreOut = VehicleTrail.toArray(a);
@@ -90,7 +93,17 @@ public class VehicleDiGraph {
 		if (!fieldDictionary.containsKey(v2.v.make)) {
 			addField(v2.v.make);
 		}
+		if (!fieldDictionary.containsKey(v2.v.fuelType)) {
+			addField(v2.v.fuelType);
+		}
 		connect(fieldDictionary.get(v2.v.make), v2);
+		connect(fieldDictionary.get(v2.v.fuelType), v2);
+		for (String tag : v2.v.getTags()){
+			if (!fieldDictionary.containsKey(tag)) 
+				addField(tag);
+			connect(fieldDictionary.get(tag), v2);
+		}
+		
 
 		String cost = String.format("cost:$%.2f", ((int) (v2.v.cost / costIncrements)) * costIncrements);
 		connect(fieldDictionary.get(cost), v2);

@@ -1,6 +1,6 @@
 package objects;
 
-
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Vehicle {
@@ -10,11 +10,14 @@ public class Vehicle {
 	public String fuelType1;
 	public double cost;
 	public double kmPerLiter;
-	
+	private ArrayList<VehicleDataPoint> dp;
+	private ArrayList<String> tags;
+
 	/**
 	 * C
+	 * 
 	 * @param model
-	 * @param mak 
+	 * @param mak
 	 * @param fuelType
 	 */
 	public Vehicle(String model, String make, String fuelType) {
@@ -24,11 +27,16 @@ public class Vehicle {
 		this.fuelType1 = "";
 		Random r = new Random();
 		this.cost = 1000 + r.nextInt(4000);
-		this.kmPerLiter = (7000 + r.nextInt(4000))/(1000*100); // Gives a random km per liter
+		this.kmPerLiter = (7000 + r.nextInt(4000)) / (1000 * 100); // Gives a
+																	// random km
+																	// per liter
+		dp = new ArrayList<VehicleDataPoint>();
+		tags = new ArrayList<String>();
 	}
-	
+
 	/**
 	 * Constructs a Vehicle from a VehicleDataPoint, copying its attributes.
+	 * 
 	 * @param v
 	 */
 	public Vehicle(VehicleDataPoint v) {
@@ -37,9 +45,17 @@ public class Vehicle {
 	}
 
 	public void addData(VehicleDataPoint v) {
-		
+		dp.add(v);
 	}
 
+	public void addTag(String s) {
+		if (!tags.contains(s.toLowerCase()))
+			tags.add(s.toLowerCase());
+	}
+
+	public String[] getTags() {
+		return tags.toArray(new String[tags.size()]);
+	}
 
 	public int compareTo(Vehicle v) {
 		if (greater(v.model, this.model.toLowerCase()))
@@ -64,11 +80,25 @@ public class Vehicle {
 		} else
 			return -1;
 	}
-	public String toString(){
-		return String.format("%s %s %s %.2f", this.make, this.model, this.fuelType1,this.cost);
-		
+
+	public String toString() {
+		return String.format("[%s] [%s] [%s] [$%.2f] %s", this.make, this.model, this.fuelType, this.cost,
+				this.tags.toString());
+	}
+
+	public VehicleDataPoint getDp() {
+		return this.dp.get(0);
 	}
 	
+	public VehicleJSON toJSON(){
+		VehicleJSON j = new VehicleJSON();
+		j.manufacturer = make;
+		j.model = model;
+		j.image = "";
+		j.cost = cost;
+		return j;
+	}
+
 	public int compareTo(VehicleDataPoint v) {
 		if (greater(v.model, this.model.toLowerCase()) && !v.model.equals(""))
 			return 1;
@@ -92,6 +122,7 @@ public class Vehicle {
 		} else
 			return -1;
 	}
+
 	private boolean greater(Comparable a, Comparable b) {
 		return (a.compareTo(b)) > 0;
 	}
