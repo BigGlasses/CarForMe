@@ -7,7 +7,7 @@ var Input = React.createClass({
     return React.createElement(
       "div",
       { className: "Input" },
-      React.createElement("input", { id: this.props.manufacturer, autocomplete: "false", required: true, type: this.props.type, placeholder: this.props.placeholder }),
+      React.createElement("input", { id: this.props.manufacturer, autoComplete: "false", required: true, type: this.props.type, placeholder: this.props.placeholder }),
       React.createElement("label", { "for": this.props.manufacturer })
        //document.write(this.props.manufacturer);
         //document.write("------");
