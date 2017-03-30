@@ -86,7 +86,7 @@ var ContactItem = React.createClass({
     name: React.PropTypes.string.isRequired,
     email: React.PropTypes.string.isRequired,
     description: React.PropTypes.string,
-    manufacturer: React.PropTypes.manufacturer,
+    manufacturer: React.PropTypes.string,
   },
 
   render: function() {
