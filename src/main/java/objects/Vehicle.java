@@ -1,6 +1,7 @@
 package objects;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Vehicle {
@@ -27,7 +28,7 @@ public class Vehicle {
 		this.fuelType1 = "";
 		Random r = new Random();
 		this.cost = 1000 + r.nextInt(4000);
-		this.kmPerLiter = (7000.0 + r.nextInt(4000)) / (1000.0 * 100.0); // Gives a
+		this.kmPerLiter = (7000.0 + r.nextInt(10000)) / (1000.0); // Gives a
 																	// random km
 																	// per liter
 		dp = new ArrayList<VehicleDataPoint>();
@@ -102,6 +103,9 @@ public class Vehicle {
 		j.model = model;
 		j.image = "";
 		j.cost = cost;
+		String [] tags = getTags();
+		Arrays.sort(tags);
+		j.tags = tags;
 		return j;
 	}
 

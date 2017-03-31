@@ -27,8 +27,10 @@ import objects.VehicleNode;
 public class VehicleController {
 
 	private Random dice = new Random();
+
 	/**
 	 * Returns a random vehicle from the data set.
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -41,12 +43,17 @@ public class VehicleController {
 
 	/**
 	 * Performs a breadth first search for a Vehicle using the VehicleDiGraph.
-	 * @param manufacturer Car manufacturer
-	 * @param model Car model
-	 * @param budget Money to spend
-	 * @param travelDistance Kilometers traveled per week
+	 * 
+	 * @param manufacturer
+	 *            Car manufacturer
+	 * @param model
+	 *            Car model
+	 * @param budget
+	 *            Money to spend
+	 * @param travelDistance
+	 *            Kilometers traveled per week
 	 * @return List of maximum 10 most suited vehicles.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public @ResponseBody VehicleJSON[] search(
@@ -55,66 +62,78 @@ public class VehicleController {
 			@RequestParam(value = "budget", required = false, defaultValue = "") String budget,
 			@RequestParam(value = "kmperweek", required = false, defaultValue = "") String travelDistance,
 			@RequestParam(value = "wantFields", required = false, defaultValue = "") String wantFields,
-			@RequestParam(value = "dontwantFields", required = false, defaultValue = "") String dontWantFields) throws Exception {
+			@RequestParam(value = "getImage", required = false, defaultValue = "") String getImage,
+			@RequestParam(value = "dontwantFields", required = false, defaultValue = "") String dontWantFields)
+			throws Exception {
 		int kmperweek;
+		boolean retreiveImage = true;
+		if (!getImage.equals(""))
+			retreiveImage = true;
 		if (travelDistance.equals(""))
 			kmperweek = 200;
 		else
 			kmperweek = Integer.parseInt(travelDistance);
-		
-		int c = Integer.parseInt(budget);
+
+		int co = Integer.parseInt(budget);
 		String cost = String.format("cost:$%.2f",
-				((int) (c / VehicleDiGraph.costIncrements)) * VehicleDiGraph.costIncrements);
+				((int) (co / VehicleDiGraph.costIncrements)) * VehicleDiGraph.costIncrements);
 		ArrayList<String> softFields = new ArrayList<String>();
 		softFields.add(cost);
 		ArrayList<String> hardFields = new ArrayList<String>();
 		ArrayList<String> negativeHardFields = new ArrayList<String>();
-		
+
 		Scanner fieldReader = new Scanner(wantFields).useDelimiter(";");
-		while (fieldReader.hasNext()){
+		while (fieldReader.hasNext()) {
 			String s = fieldReader.next();
 			hardFields.add(s);
 		}
 		fieldReader = new Scanner(dontWantFields).useDelimiter(";");
-		while (fieldReader.hasNext()){
+		while (fieldReader.hasNext()) {
 			negativeHardFields.add(fieldReader.next());
 		}
-		
-		String [] a = new String [softFields.size()];
-		String [] b = new String [hardFields.size()];
-		Vehicle [] vs = VehicleDiGraph.searchVehicles(softFields.toArray(a), hardFields.toArray(b));
-		VehicleJSON [] out = new VehicleJSON [vs.length];
-		for (int i = 0; i < out.length ; i ++){
-			out [i] = vs [i].toJSON();
-			
-			// Get the image from GOOGLE CUSTOM SEARCH
-			String q = "";
-			q = out [i].manufacturer + " " + out [i].model;
-			q = q.replaceAll("\\s+", "%20");
-			JSONObject json = jsonGetter.getJSON("https://www.googleapis.com/customsearch/v1?q=" + q + "&cx=004748682743789405605%3Aswfov2xvt6m&key=AIzaSyDjU2ImybIvLHhibwboU2LiikSxxxzi8TI");
-			
-			json = (json.getJSONArray("items")).getJSONObject(0);
+
+		String[] a = new String[softFields.size()];
+		String[] b = new String[hardFields.size()];
+		String[] c = new String[negativeHardFields.size()];
+		Vehicle[] vs = VehicleDiGraph.searchVehicles(softFields.toArray(a), hardFields.toArray(b),
+				negativeHardFields.toArray(c));
+		VehicleJSON[] out = new VehicleJSON[vs.length];
+		for (int i = 0; i < out.length; i++) {
+			out[i] = vs[i].toJSON();
+
 			String img;
-			try{
-				img = (json.getJSONObject("pagemap").getJSONArray("cse_image").getJSONObject(0).getString("src"));
-			}
-			catch (Exception e){
-				img = "";
+			try {
+				if (retreiveImage) {
+					// Get the image from GOOGLE CUSTOM SEARCH
+					String q = "";
+					q = out[i].manufacturer + " " + out[i].model;
+					q = q.replaceAll("\\s+", "%20");
+					JSONObject json = jsonGetter.getJSON("https://www.googleapis.com/customsearch/v1?q=" + q
+							+ "&cx=004748682743789405605%3Aswfov2xvt6m&key=AIzaSyDjU2ImybIvLHhibwboU2LiikSxxxzi8TI");
+
+					json = (json.getJSONArray("items")).getJSONObject(0);
+					img = (json.getJSONObject("pagemap").getJSONArray("cse_image").getJSONObject(0).getString("src"));
+				} else
+					img = "images/genericcar.jpg";
+			} catch (Exception e) {
+				img = "images/genericcar.jpg";
 			}
 			out[i].image = img;
-			out[i].gasPerYear = 52*kmperweek/vs[i].	kmPerLiter*1.22;
-			}
+			out[i].gasPerYear = (int) (52 * kmperweek / vs[i].kmPerLiter * 1.22);
+		}
 		return out;
 	}
 
 	/**
 	 * Returns all the connections for a given Field in VehicleDiGraph name.
-	 * @param fieldName String of field to get connections of.
+	 * 
+	 * @param fieldName
+	 *            String of field to get connections of.
 	 * @return List of connections.
 	 */
-	@RequestMapping(value = "/connections",
-			method = RequestMethod.GET)
-	public @ResponseBody String[] conn(@RequestParam(value = "field", required = false, defaultValue = "") String fieldName) {
+	@RequestMapping(value = "/connections", method = RequestMethod.GET)
+	public @ResponseBody String[] conn(
+			@RequestParam(value = "field", required = false, defaultValue = "") String fieldName) {
 		ArrayList<Node> f = (ArrayList) VehicleDiGraph.getNode(fieldName).getConnections();
 		String[] vl = new String[f.size()];
 
@@ -126,15 +145,17 @@ public class VehicleController {
 		// return
 		// VehicleParser.allVehicles.get(VehicleParser.searchVehiclesIndex(v)%VehicleParser.allVehicles.size());
 	}
+
 	/**
 	 * Returns all the connections for a given Field in VehicleDiGraph name.
-	 * @param fieldName String of field to get connections of.
+	 * 
+	 * @param fieldName
+	 *            String of field to get connections of.
 	 * @return List of connections.
 	 */
-	@RequestMapping(value = "/tags",
-			method = RequestMethod.GET)
+	@RequestMapping(value = "/tags", method = RequestMethod.GET)
 	public @ResponseBody String[] allTags() {
-		String [] tags = VehicleDiGraph.allFields();
+		String[] tags = VehicleDiGraph.allFields();
 		return tags;
 
 		// return

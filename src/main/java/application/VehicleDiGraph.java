@@ -42,7 +42,7 @@ public class VehicleDiGraph {
 		return fieldDictionary.get(s.toLowerCase());
 	}
 
-	public static Vehicle[] searchVehicles(String[] softFields, String[] hardFields) {
+	public static Vehicle[] searchVehicles(String[] softFields, String[] hardFields, String [] negativeHardFields) {
 		VehicleTrail = new HashSet<VehicleNode>();
 		int depth = 0;
 		ArrayList<String> allSoftFields = new ArrayList<String>();
@@ -53,7 +53,7 @@ public class VehicleDiGraph {
 		}
 
 		// Breadth first search
-		while (depth < 2) {
+		while (VehicleTrail.size() < 10*(1 + hardFields.length + negativeHardFields.length) && depth < 5) {
 			for (String s : softFields) {
 				System.out.println(s);
 				System.out.println(fieldDictionary.get(s));
@@ -77,10 +77,14 @@ public class VehicleDiGraph {
 		// Remove all that do not match hard fields.
 		for (String s : hardFields) {
 			FieldNode n = VehicleDiGraph.getNode(s.toLowerCase());
-			System.out.println(s);
-			System.out.println(n);
-			// This is sequential
+			// This is binary deletion
 			VehicleTrail.removeIf(p -> !n.checkVehicleChild(p));
+		}
+		// Remove all that are in negative hard fields.
+		for (String s : negativeHardFields) {
+			FieldNode n = VehicleDiGraph.getNode(s.toLowerCase());
+			// This is binary deletion
+			VehicleTrail.removeIf(p -> n.checkVehicleChild(p));
 		}
 		VehicleNode[] a = new VehicleNode[VehicleTrail.size()];
 		VehicleNode[] vehiclesPreOut = VehicleTrail.toArray(a);
