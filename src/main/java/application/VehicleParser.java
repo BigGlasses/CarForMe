@@ -24,9 +24,13 @@ public class VehicleParser {
 	 */
 	public static void init() throws IOException {
 		allVehicles = new ArrayList<Vehicle>();
-		FileReader n = new FileReader("parsed.txt");
 
-		CSVReader reader = new CSVReader(new FileReader("datasets/vehicles.csv"));
+
+		//ClassLoader classLoader = VehicleParser.class.getClassLoader();
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		String f = classLoader.getResource("vehicles.csv").getFile();
+		f = f.replace("%20", " ");
+		CSVReader reader = new CSVReader(new FileReader(f));
 		String[] nextLine;
 		reader.readNext(); // Skip header
 		while ((nextLine = reader.readNext()) != null) {
@@ -42,8 +46,11 @@ public class VehicleParser {
 			ve.addTag(nextLine [24]); //Y wheel drive
 		}
 		reader.close();
-		
-		reader = new CSVReader(new FileReader("datasets/data.csv"));
+
+		classLoader = Thread.currentThread().getContextClassLoader();
+		f = classLoader.getResource("data.csv").getFile();
+		f = f.replace("%20", " ");
+		reader = new CSVReader(new FileReader(f));
 		reader.readNext(); // Skip header
 		while ((nextLine = reader.readNext()) != null) {
 			// Grab car information
@@ -60,7 +67,7 @@ public class VehicleParser {
 
 		VehicleDiGraph.init();
 		for (Vehicle v : allVehicles) {
-			System.out.println(v);
+			//System.out.println(v);
 			VehicleDiGraph.createVehicle(v);
 		}
 	}

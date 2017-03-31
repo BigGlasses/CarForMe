@@ -33,7 +33,7 @@ public class VehicleDiGraph {
 	private static FieldNode addField(String s) {
 		FieldNode n = new FieldNode(s.toLowerCase());
 		fieldStrings.add(s.toLowerCase());
-		System.out.println("Added Field: " + s.toLowerCase());
+		//System.out.println("Added Field: " + s.toLowerCase());
 		fieldDictionary.put(s.toLowerCase(), n);
 		return n;
 	}
@@ -55,8 +55,8 @@ public class VehicleDiGraph {
 		// Breadth first search
 		while (VehicleTrail.size() < 10*(1 + hardFields.length + negativeHardFields.length) && depth < 5) {
 			for (String s : softFields) {
-				System.out.println(s);
-				System.out.println(fieldDictionary.get(s));
+				//System.out.println(s);
+				//System.out.println(fieldDictionary.get(s));
 				for (Node a : fieldDictionary.get(s).getConnections()) {
 					if ((a instanceof VehicleNode)) {
 						VehicleTrail.add((VehicleNode) a);
@@ -126,7 +126,7 @@ public class VehicleDiGraph {
 
 	public static void printFields() {
 		for (String n : fieldDictionary.keySet()) {
-			System.out.println(n);
+			//System.out.println(n);
 		}
 	}
 
