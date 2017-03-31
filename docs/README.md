@@ -6,10 +6,10 @@
 
 ## Milestones By Week
 1. [x] Data processed and Stored in txt file.
-2. [ ] Basic back-end deployed | Front-end Application Designed & Begin Development
-3. [ ] Back-end Application Ready
-4. [ ] Front-End Deployed
-5. [ ] Final Bug Fixes, No New Features
+2. [x] Basic back-end deployed | Front-end Application Designed & Begin Development
+3. [x] Back-end Application Ready
+4. [x] Front-End Deployed
+5. [x] Final Bug Fixes, No New Features
 6. [ ] Final Front and Back-End Deployment
 
 ## Roles
