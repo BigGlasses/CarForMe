@@ -1,7 +1,7 @@
 
 
 
-$.getJSON('http://getstartedtomcat-uncorpulent-patriarchship.mybluemix.net/vehicles/tags', { get_param: 'value' }, function(data) {
+$.getJSON('https://getstartedtomcat-uncorpulent-patriarchship.mybluemix.net/vehicles/tags', { get_param: 'value' }, function(data) {
 	countries = data;
 	var cList = $('#tagList')
 	$.each(countries, function(i)
@@ -56,7 +56,7 @@ function doRequest(){
 	}, 100);
   	
 	var budget = $('#budgetinput').val()
-	$.getJSON('http://getstartedtomcat-uncorpulent-patriarchship.mybluemix.net/vehicles/search?budget=' + budget + '&wantFields=' + wanted + '&dontWantField=' + unWanted, { get_param: 'value' }, function(data) {
+	$.getJSON('https://getstartedtomcat-uncorpulent-patriarchship.mybluemix.net/vehicles/search?budget=' + budget + '&wantFields=' + wanted + '&dontWantField=' + unWanted, { get_param: 'value' }, function(data) {
 		
 		var cList = $('#carList')
 		cList.html('');
