@@ -2,6 +2,7 @@ package configuration;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.json.JSONObject;
@@ -52,16 +53,31 @@ public class VehicleController {
 			@RequestParam(value = "manufacturer", required = false, defaultValue = "") String manufacturer,
 			@RequestParam(value = "model", required = false, defaultValue = "") String model,
 			@RequestParam(value = "budget", required = false, defaultValue = "") String budget,
-			@RequestParam(value = "kmperweek", required = false, defaultValue = "") String travelDistance) throws Exception {
+			@RequestParam(value = "kmperweek", required = false, defaultValue = "") String travelDistance,
+			@RequestParam(value = "wantFields", required = false, defaultValue = "") String wantFields,
+			@RequestParam(value = "dontwantFields", required = false, defaultValue = "") String dontWantFields) throws Exception {
+		int kmperweek;
+		if (travelDistance.equals(""))
+			kmperweek = 200;
+		else
+			kmperweek = Integer.parseInt(travelDistance);
+		
 		int c = Integer.parseInt(budget);
 		String cost = String.format("cost:$%.2f",
 				((int) (c / VehicleDiGraph.costIncrements)) * VehicleDiGraph.costIncrements);
 		ArrayList<String> softFields = new ArrayList<String>();
 		softFields.add(cost);
 		ArrayList<String> hardFields = new ArrayList<String>();
-		if (!manufacturer.equals(""))
-		{
-			hardFields.add(manufacturer);
+		ArrayList<String> negativeHardFields = new ArrayList<String>();
+		
+		Scanner fieldReader = new Scanner(wantFields).useDelimiter(";");
+		while (fieldReader.hasNext()){
+			String s = fieldReader.next();
+			hardFields.add(s);
+		}
+		fieldReader = new Scanner(dontWantFields).useDelimiter(";");
+		while (fieldReader.hasNext()){
+			negativeHardFields.add(fieldReader.next());
 		}
 		
 		String [] a = new String [softFields.size()];
@@ -78,8 +94,15 @@ public class VehicleController {
 			JSONObject json = jsonGetter.getJSON("https://www.googleapis.com/customsearch/v1?q=" + q + "&cx=004748682743789405605%3Aswfov2xvt6m&key=AIzaSyDjU2ImybIvLHhibwboU2LiikSxxxzi8TI");
 			
 			json = (json.getJSONArray("items")).getJSONObject(0);
-			String img = (json.getJSONObject("pagemap").getJSONArray("cse_image").getJSONObject(0).getString("src"));
+			String img;
+			try{
+				img = (json.getJSONObject("pagemap").getJSONArray("cse_image").getJSONObject(0).getString("src"));
+			}
+			catch (Exception e){
+				img = "";
+			}
 			out[i].image = img;
+			out[i].gasPerYear = 52*kmperweek/vs[i].	kmPerLiter*1.22;
 			}
 		return out;
 	}
@@ -98,8 +121,21 @@ public class VehicleController {
 		for (int i = 0; i < f.size(); i++) {
 			vl[i] = f.get(i).getName();
 		}
-		System.out.println(f.size());
 		return vl;
+
+		// return
+		// VehicleParser.allVehicles.get(VehicleParser.searchVehiclesIndex(v)%VehicleParser.allVehicles.size());
+	}
+	/**
+	 * Returns all the connections for a given Field in VehicleDiGraph name.
+	 * @param fieldName String of field to get connections of.
+	 * @return List of connections.
+	 */
+	@RequestMapping(value = "/tags",
+			method = RequestMethod.GET)
+	public @ResponseBody String[] allTags() {
+		String [] tags = VehicleDiGraph.allFields();
+		return tags;
 
 		// return
 		// VehicleParser.allVehicles.get(VehicleParser.searchVehiclesIndex(v)%VehicleParser.allVehicles.size());

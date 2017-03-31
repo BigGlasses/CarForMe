@@ -1,0 +1,36 @@
+
+body {
+	background: white;
+}
+
+.tCenter {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.carHolder{
+	background:  white;
+	border-color: aliceblue;
+	border-width: 10px;
+	border: solid aliceblue 10px;
+	padding:  5px;
+}
+
+.tagD {
+    /* flex-wrap: wrap; */
+    /* overflow-wrap: normal; */
+    background: darkgrey;
+    max-width: 100%;
+    word-wrap: break-word;
+    white-space: pre-line;
+    padding: 5px;
+    transition-duration: 0.5s;
+    cursor: pointer;
+}
+
+#tagList {
+	background: white;
+	border-radius: 10px;
+	padding-top: 30px;
+
+}

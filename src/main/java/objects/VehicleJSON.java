@@ -5,6 +5,7 @@ public class VehicleJSON {
 	public String model;
 	public String image;
 	public double cost;
+	public double gasPerYear;
 	
 	public VehicleJSON(){
 		

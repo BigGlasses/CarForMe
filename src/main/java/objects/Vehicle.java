@@ -27,7 +27,7 @@ public class Vehicle {
 		this.fuelType1 = "";
 		Random r = new Random();
 		this.cost = 1000 + r.nextInt(4000);
-		this.kmPerLiter = (7000 + r.nextInt(4000)) / (1000 * 100); // Gives a
+		this.kmPerLiter = (7000.0 + r.nextInt(4000)) / (1000.0 * 100.0); // Gives a
 																	// random km
 																	// per liter
 		dp = new ArrayList<VehicleDataPoint>();
@@ -49,8 +49,14 @@ public class Vehicle {
 	}
 
 	public void addTag(String s) {
+		//Make sure tag is not a number
+		try{
+			Double.parseDouble(s);
+		}
+		catch (Exception e){
 		if (!tags.contains(s.toLowerCase()))
 			tags.add(s.toLowerCase());
+		}
 	}
 
 	public String[] getTags() {

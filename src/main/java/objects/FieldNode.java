@@ -62,7 +62,6 @@ public class FieldNode extends Node implements Comparable {
 	 */
 	public boolean checkVehicleChild(VehicleNode v){
 		int index = VehicleParser.searchVehiclesIndex(vehicleChildren, v.v.getDp());
-		System.out.println(vehicleChildren.size());
 		if (index < 0 || index >= vehicleChildren.size()){
 			return false;
 		}

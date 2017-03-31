@@ -1,6 +1,7 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -14,12 +15,14 @@ import objects.VehicleNode;
 public class VehicleDiGraph {
 	private static Set<VehicleNode> VehicleTrail;
 	private static Map<String, FieldNode> fieldDictionary;
+	private static ArrayList<String> fieldStrings;
 
 	public final static double costIncrements = 200;
 	public final static double maxCost = 25000;
 
 	public static void init() {
 		fieldDictionary = new HashMap<String, FieldNode>();
+		fieldStrings = new ArrayList<String>();
 		for (int i = 0; i * costIncrements < maxCost; i++) {
 			FieldNode n = addField(String.format("cost:$%.2f", i * costIncrements));
 			if (i > 0)
@@ -29,6 +32,7 @@ public class VehicleDiGraph {
 
 	private static FieldNode addField(String s) {
 		FieldNode n = new FieldNode(s.toLowerCase());
+		fieldStrings.add(s.toLowerCase());
 		System.out.println("Added Field: " + s.toLowerCase());
 		fieldDictionary.put(s.toLowerCase(), n);
 		return n;
@@ -65,7 +69,7 @@ public class VehicleDiGraph {
 				}
 			}
 			depth++;
-			String [] a = new String [newSoftFields.size()];
+			String[] a = new String[newSoftFields.size()];
 			softFields = newSoftFields.toArray(a);
 			newSoftFields.clear();
 		}
@@ -78,9 +82,9 @@ public class VehicleDiGraph {
 			// This is sequential
 			VehicleTrail.removeIf(p -> !n.checkVehicleChild(p));
 		}
-		VehicleNode [] a = new VehicleNode [VehicleTrail.size()];
-		VehicleNode [] vehiclesPreOut = VehicleTrail.toArray(a);
-		Vehicle[] vehiclesOut = new Vehicle[10]; // Implement a mergesort here
+		VehicleNode[] a = new VehicleNode[VehicleTrail.size()];
+		VehicleNode[] vehiclesPreOut = VehicleTrail.toArray(a);
+		Vehicle[] vehiclesOut = new Vehicle[Math.min(10, vehiclesPreOut.length)]; // Implement a mergesort here
 		for (int i = 0; i < vehiclesOut.length; i++) {
 			if (i < vehiclesPreOut.length)
 				vehiclesOut[i] = vehiclesPreOut[i].v;
@@ -98,16 +102,22 @@ public class VehicleDiGraph {
 		}
 		connect(fieldDictionary.get(v2.v.make), v2);
 		connect(fieldDictionary.get(v2.v.fuelType), v2);
-		for (String tag : v2.v.getTags()){
-			if (!fieldDictionary.containsKey(tag)) 
+		for (String tag : v2.v.getTags()) {
+			if (!fieldDictionary.containsKey(tag))
 				addField(tag);
 			connect(fieldDictionary.get(tag), v2);
 		}
-		
 
 		String cost = String.format("cost:$%.2f", ((int) (v2.v.cost / costIncrements)) * costIncrements);
 		connect(fieldDictionary.get(cost), v2);
 		return v2;
+	}
+
+	public static String[] allFields() {
+		String [] out = fieldStrings.toArray(new String[fieldStrings.size()]);
+		Arrays.sort(out);
+		return out;
+
 	}
 
 	public static void printFields() {

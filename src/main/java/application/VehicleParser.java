@@ -31,15 +31,15 @@ public class VehicleParser {
 		reader.readNext(); // Skip header
 		while ((nextLine = reader.readNext()) != null) {
 			// Grab car information
-			String manufacturer = nextLine [26 + 20 - 1]; //AU MODEL 
-			String model = nextLine [26 + 21 - 1]; //AV MODEL 
-			String fuel = nextLine [10];
+			String manufacturer = nextLine [26 + 20]; //AU MODEL 
+			String model = nextLine [26 + 21]; //AV MODEL 
+			String fuel = nextLine [31];
 			VehicleDataPoint v = new VehicleDataPoint(model, manufacturer, fuel);
 			addVehicle(allVehicles, v);
 			Vehicle ve = allVehicles.get(searchVehiclesIndex(allVehicles, v));
-			ve.addTag(nextLine [52 + 10 - 1]); //BK VEHICLE SIZE
-			ve.addTag(nextLine [52 + 5 - 1]); //BF TRANY
-			ve.addTag(nextLine [25 - 1]); //Y wheel drive
+			ve.addTag(nextLine [52 + 11 - 1]); //BK VEHICLE SIZE
+			ve.addTag(nextLine [52 + 6 - 1]); //BF TRANY
+			ve.addTag(nextLine [24]); //Y wheel drive
 		}
 		reader.close();
 		
@@ -54,6 +54,7 @@ public class VehicleParser {
 			addVehicle(allVehicles, v);
 			Vehicle ve = allVehicles.get(searchVehiclesIndex(allVehicles, v));
 			ve.addTag(nextLine [8]);
+			ve.addTag(fuel.toLowerCase());
 		}
 		reader.close();
 
