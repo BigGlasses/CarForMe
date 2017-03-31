@@ -1,52 +1,64 @@
-﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Tony's Project</title>
-
-
-
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="default.css" />
+	<meta name="description" content="Try#4">
+	<meta charset="utf-8">
+	<title>CarForMe</title>
+	<link rel="stylesheet" href="css/tether.min.css" />
+	<link rel="stylesheet" href="css/animate.css" />
+	<link rel="stylesheet" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="css/carForMe.css">
+	<sc
 
 </head>
 <body>
-    <div id="container"></div>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js'></script>
-    <script src="js/jquery-3.1.1.min.js"></script>
-    <script src="js/main.js"></script>
+	<div id="react-app"></div>
 
-    
-    <form enctype="multipart/form-data" name="myForm" onsubmit="return printCars()" method="post">
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/tether.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/react/0.14.0-rc1/react.js"></script>
+	<script src="https://cdn.jsdelivr.net/react/0.14.0-rc1/react-dom.js"></script>
+	<div class="container" style="margin-top: 0px; padding-top: 100px; background: aliceblue;">
+		<div class="col-md-8 offset-md-2">
+			<div class="col-md-8 offset-md-2">
 
-       
+				<div class="col-md-8 offset-md-2">
+				<img id="sitelogo" src="images/logoSmall.png" class="img-fluid animated rotateIn sitelogo"/>
+				</div>
+				<div class="col-md-12">
+					<h1 class="display-3" style="text-align: center"> Welcome to CarForMe </h1>
+				</div>
+				<form class="navbar-form navbar-left" role="search">
+				<a class="navbar-brand">How much money do you have to spend?</a>
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="$CAD" id="budgetinput" aria-label="Amount (to the nearest dollar)">
+						<span class="input-group-addon">.00</span>
+					</div>
+				<a class="navbar-brand">How much will you drive per week?</a>
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="Kilometers per week." aria-label="Amount of kilometers you drive a week.">
+						<span class="input-group-addon">km</span>
+					</div>
+					<div class="row" style="margin-top:1em">
+					<div class="col-6 offset-3 text-center">
+					<button type="button" class="btn btn-primary animated sitelogo" style="cursor: pointer" onclick="doRequest()">Search</button>
+					</div>
+					</div>
+				</form>
+			</div>
+			<div class="row" id="carList">
+			</div>
+				<div class="col-md-12">
+					<h1 class="display-5" style="text-align: center"> Tags (Select to refine Search) </h1>
+				</div>
+			<div class="row" id="tagList">
+			</div>
+		</div>
+	</div>
+	<script src="js/carSearch.js"></script>
 
-        Manufacturer: <select id="manufacturer" name="manufacturer">
-            <option value="">-Select a Manufacturer-</option>
-            <option value="Acura">Acura</option>
-            <option value="Audi">Audi</option>
-            <option value="Buick">Buick</option>
-            <option value="Ford">Buick</option>
-            <p>
-            <option value="Honda">Honda</option>
-            <p>
-        </select><p>
-
-       Budget($): <input name="budget" type="text" size="10" maxlength="10"><br>
-       Driving Amount(km): <input name="KMdriven" type="text" size="10" maxlength="10" value="0"><br>
-           
-
-                     
-
-
-    </form>
-    <input id="clickMe" type="button" value="clickme" onclick="printCars();" />
-
-        
-
-    
 
 
 </body>
-</html>
+</html>	
