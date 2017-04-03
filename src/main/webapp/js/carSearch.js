@@ -1,7 +1,7 @@
 
 
 
-$.getJSON('https://carformyself.mybluemix.net/vehicles/tags', { get_param: 'value' }, function(data) {
+$.getJSON('https://carformyself.mybluemix.net/vehicles/tags', { }, function(data) {
 	countries = data;
 	var cList = $('#tagList')
 	$.each(countries, function(i)
@@ -9,7 +9,7 @@ $.getJSON('https://carformyself.mybluemix.net/vehicles/tags', { get_param: 'valu
 		if (!("cost" == countries[i].substring(0, 4))){
 
 			var li = $('<div/>')
-			.addClass('tCenter col-lg-2 col-md-4')
+			.addClass('tCenter tagH')
 			.appendTo(cList);
 			var aaa = $('<span/>')
 			.addClass('badge badge-default tagD animated')
@@ -40,7 +40,7 @@ function reduceTags(){
 	console.log(searchTerm);
 
 	tagList.each(function(i, obj) {
-		$(this).css("display", "block");
+		$(this).css("display", "inline-block");
 		if ($(this).children().text().indexOf(searchTerm) != -1) {
 
 		}
@@ -53,7 +53,16 @@ function reduceTags(){
 	});
 }
 
-setInterval(reduceTags, 4000)
+function updateHow(){
+	var budget = $('#budgetinput').val();
+	var travel = $('#travelinput').val();
+	if (travel == "") travel = 200;
+	var t = $('#howmuch');
+	t.text("I have $" + budget + " to spend, and plan to drive around " + 52*parseInt(travel) + "km yearly.");
+}
+updateHow();
+
+setInterval(reduceTags, 5000)
 
 function doRequest(){
 	var aaa = $(".sitelogo");
@@ -76,7 +85,7 @@ function doRequest(){
   	
 	var budget = $('#budgetinput').val()
 	var travel = $('#travelinput').val()
-	$.getJSON('https://carformyself.mybluemix.net/vehicles/search?budget=' + budget + '&kmperweek=' + travel + '&wantFields='+ wanted + '&dontWantField=' + unWanted, { get_param: 'value' }, function(data) {
+	$.getJSON('https://carformyself.mybluemix.net/vehicles/search', { budget: budget, kmperweek: travel, wantFields: wanted, dontWantFields: wanted }, function(data) {
 		
 		var cList = $('#carList')
 		cList.html('');
@@ -88,7 +97,7 @@ function doRequest(){
 		{"manufacturer":"chevrolet", "gasPerYear":"2100.00","model":"avalanche 1500 awd","image":"https://img2.carmax.com/img/vehicles/14149635/1/320.jpg","cost":1360.0}];
 		if (data.length == 0){
 			var li = $('<div/>')
-			.addClass('col-md-12 tCenter carHolder animated bounceInDown')
+			.addClass('col-lg-12 tCenter carHolder animated bounceInDown')
 			.appendTo(cList);
 			var aaa = $('<h2/>')
 			.text("no results :'(")
@@ -98,15 +107,15 @@ function doRequest(){
 		}
 		$.each(data, function(i){
 			var li = $('<div/>')
-			.addClass('col-md-4 tCenter carHolder animated bounceInDown')
+			.addClass('col-lg-4 col-sm-4 tCenter carHolder animated bounceInDown')
 			.appendTo(cList);
-			var aaa = $('<img/>')
-			.addClass('img-fluid animated  rounded img-thumbnail')
-			.attr("src",data[i].image)
-			.appendTo(li);
 			var aaa = $('<h3/>')
 			.text(jsUcfirst(data[i].manufacturer))
 			.addClass('img-fluid animated  rounded img-thumbnail')
+			.appendTo(li);
+			var aaa = $('<img/>')
+			.addClass('img-fluid animated  rounded img-thumbnail')
+			.attr("src",data[i].image)
 			.appendTo(li);
 			var aaa = $('<h4/>')
 			.text(jsUcfirst(data[i].model))
@@ -117,7 +126,7 @@ function doRequest(){
 			.addClass('img-fluid animated  rounded img-thumbnail')
 			.appendTo(li);
 			var aaa = $('<h6/>')
-			.text("$" + data[i].gasPerYear + " CAD in gas/year")
+			.text("$" + data[i].gasPerYear + " CAD in " + data[i].fuelType +  " /year")
 			.addClass('img-fluid animated  rounded img-thumbnail')
 			.appendTo(li);
 			var ccc = $('<div/>')
@@ -126,14 +135,14 @@ function doRequest(){
 			.appendTo(li);
 			$.each(data[i].tags, function(j){
 			var bbb = $('<div/>')
-			.addClass('tCenter')
+			.addClass('text-center tagH')
   			.css("margin", "5px")
 			.appendTo(ccc);
 			var col = "gray";
 			if (wanted.indexOf(data[i].tags[j]) != -1) col = "green";
 			var aaa = $('<span/>')
 			.text(data[i].tags[j])
-			.addClass('badge badge-default')
+			.addClass('badge badge-default tagD')
   			.css("background", col)
 			.appendTo(bbb);
 			});
@@ -141,8 +150,17 @@ function doRequest(){
 	});
 	
 }
+$('#budgetinput').val(2000);
+$('#travelinput').val(200);
+doRequest();
 
 function jsUcfirst(string) 
 {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
+/**
+$(document).ready(function () {
+  $("#tagList").niceScroll();
+  $("#carList").niceScroll();
+});
+*/

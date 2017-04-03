@@ -20,7 +20,7 @@ body {
 .tagD {
     /* flex-wrap: wrap; */
     /* overflow-wrap: normal; */
-    background: darkgrey;
+    background: gray;
     max-width: 100%;
     word-wrap: break-word;
     white-space: pre-line;

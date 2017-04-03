@@ -7,17 +7,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import objects.FieldNode;
 import objects.Node;
+import objects.FieldNode;
 import objects.Vehicle;
 import objects.VehicleNode;
 
 public class VehicleDiGraph {
-	private static Set<VehicleNode> VehicleTrail;
 	private static Map<String, FieldNode> fieldDictionary;
 	private static ArrayList<String> fieldStrings;
 
-	public final static double costIncrements = 200;
+	public final static double costIncrements = 500;
 	public final static double maxCost = 25000;
 
 	public static void init() {
@@ -31,6 +30,7 @@ public class VehicleDiGraph {
 	}
 
 	private static FieldNode addField(String s) {
+		if (s.equals("")) return null;
 		FieldNode n = new FieldNode(s.toLowerCase());
 		fieldStrings.add(s.toLowerCase());
 		//System.out.println("Added Field: " + s.toLowerCase());
@@ -42,8 +42,23 @@ public class VehicleDiGraph {
 		return fieldDictionary.get(s.toLowerCase());
 	}
 
+	public static void matchFields(HashSet <VehicleNode> v, String[] hardFields, String[] negativeHardFields){
+		// Remove all that do not match hard fields.
+		for (String s : hardFields) {
+			FieldNode n = VehicleDiGraph.getNode(s.toLowerCase());
+			// This is binary deletion
+			v.removeIf(p -> !n.checkVehicleChild(p));
+		}
+		// Remove all that are in negative hard fields.
+		for (String s : negativeHardFields) {
+			FieldNode n = VehicleDiGraph.getNode(s.toLowerCase());
+			// This is binary deletion
+			v.removeIf(p -> n.checkVehicleChild(p));
+		}
+	}
+	
 	public static Vehicle[] searchVehicles(String[] softFields, String[] hardFields, String [] negativeHardFields) {
-		VehicleTrail = new HashSet<VehicleNode>();
+		HashSet <VehicleNode> VehicleTrail = new HashSet<VehicleNode>();
 		int depth = 0;
 		ArrayList<String> allSoftFields = new ArrayList<String>();
 		ArrayList<String> newSoftFields = new ArrayList<String>();
@@ -53,11 +68,11 @@ public class VehicleDiGraph {
 		}
 
 		// Breadth first search
-		while (VehicleTrail.size() < 10*(1 + hardFields.length + negativeHardFields.length) && depth < 5) {
+		while (VehicleTrail.size() < 12 && depth < 10) {
 			for (String s : softFields) {
-				//System.out.println(s);
-				//System.out.println(fieldDictionary.get(s));
-				for (Node a : fieldDictionary.get(s).getConnections()) {
+				Node current = fieldDictionary.get(s);
+				if (current == null) continue;
+				for (Node a : current.getConnections()) {
 					if ((a instanceof VehicleNode)) {
 						VehicleTrail.add((VehicleNode) a);
 					} else if ((a instanceof FieldNode)) {
@@ -69,26 +84,16 @@ public class VehicleDiGraph {
 				}
 			}
 			depth++;
+			matchFields(VehicleTrail, hardFields, negativeHardFields);
 			String[] a = new String[newSoftFields.size()];
 			softFields = newSoftFields.toArray(a);
 			newSoftFields.clear();
 		}
 
-		// Remove all that do not match hard fields.
-		for (String s : hardFields) {
-			FieldNode n = VehicleDiGraph.getNode(s.toLowerCase());
-			// This is binary deletion
-			VehicleTrail.removeIf(p -> !n.checkVehicleChild(p));
-		}
-		// Remove all that are in negative hard fields.
-		for (String s : negativeHardFields) {
-			FieldNode n = VehicleDiGraph.getNode(s.toLowerCase());
-			// This is binary deletion
-			VehicleTrail.removeIf(p -> n.checkVehicleChild(p));
-		}
+
 		VehicleNode[] a = new VehicleNode[VehicleTrail.size()];
 		VehicleNode[] vehiclesPreOut = VehicleTrail.toArray(a);
-		Vehicle[] vehiclesOut = new Vehicle[Math.min(10, vehiclesPreOut.length)]; // Implement a mergesort here
+		Vehicle[] vehiclesOut = new Vehicle[Math.min(12, vehiclesPreOut.length)]; // Implement a mergesort here
 		for (int i = 0; i < vehiclesOut.length; i++) {
 			if (i < vehiclesPreOut.length)
 				vehiclesOut[i] = vehiclesPreOut[i].v;
@@ -126,13 +131,15 @@ public class VehicleDiGraph {
 
 	public static void printFields() {
 		for (String n : fieldDictionary.keySet()) {
-			//System.out.println(n);
+			System.out.println(n);
 		}
 	}
 
 	public static void connect(Node f, Node f2) {
+		if (f != null && f2 != null){
 		f.addConnection(f2);
 		f2.addConnection(f);
+		}
 	}
 
 	public static void disconnect(Node f, Node f2) {

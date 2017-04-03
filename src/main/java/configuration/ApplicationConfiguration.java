@@ -1,6 +1,5 @@
 package configuration;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.springframework.boot.SpringApplication;

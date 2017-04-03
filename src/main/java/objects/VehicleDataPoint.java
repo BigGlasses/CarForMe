@@ -5,11 +5,13 @@ public class VehicleDataPoint {
 	public String make;
 	public String fuelType;
 	public String fuelType1;
+	public String year;
 
-	public VehicleDataPoint(String model, String make, String fuelType) {
+	public VehicleDataPoint(String model, String make, String fuelType, String year) {
 		this.model = model.toLowerCase();
 		this.make = make.toLowerCase();
 		this.fuelType = fuelType.toLowerCase();
 		this.fuelType1 = "";
+		this.year = year;
 	}
 }

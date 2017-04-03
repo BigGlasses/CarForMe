@@ -1,10 +1,12 @@
 package configuration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.apache.tomcat.jni.Time;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import application.CarImageThread;
 import application.VehicleDiGraph;
 import application.VehicleParser;
 import application.jsonGetter;
@@ -25,6 +28,14 @@ import objects.VehicleNode;
 @Controller
 @RequestMapping("/vehicles")
 public class VehicleController {
+	private static final double REGULAR_GASOLINE_PRICE = 0.99;
+	private static final double PREMIUM_GASOLINE_PRICE = 1.10;
+	private static final double DIESEL_PRICE = 1.09;
+	private static final double ELECTRICITY_PRICE = 0.1;
+
+	private static final double AVG_GASOLINE_LITER_PER_KM = 12;
+	private static final double AVG_DIESEL_LITER_PER_KM = 12;
+	private static final double AVG_ELECTRICITY_LITER_PER_KM = 1;
 
 	private Random dice = new Random();
 
@@ -52,7 +63,7 @@ public class VehicleController {
 	 *            Money to spend
 	 * @param travelDistance
 	 *            Kilometers traveled per week
-	 * @return List of maximum 10 most suited vehicles.
+	 * @return List of maximum 15 most suited vehicles.
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
@@ -66,21 +77,31 @@ public class VehicleController {
 			@RequestParam(value = "dontwantFields", required = false, defaultValue = "") String dontWantFields)
 			throws Exception {
 		int kmperweek;
-		boolean retreiveImage = true;
-		if (!getImage.equals(""))
-			retreiveImage = true;
+		ArrayList<String> softFields = new ArrayList<String>();
+		ArrayList<String> hardFields = new ArrayList<String>();
+		ArrayList<String> negativeHardFields = new ArrayList<String>();
+		boolean retrieveImage = true;
 		if (travelDistance.equals(""))
 			kmperweek = 200;
 		else
 			kmperweek = Integer.parseInt(travelDistance);
 
-		int co = Integer.parseInt(budget);
-		String cost = String.format("cost:$%.2f",
-				((int) (co / VehicleDiGraph.costIncrements)) * VehicleDiGraph.costIncrements);
-		ArrayList<String> softFields = new ArrayList<String>();
-		softFields.add(cost);
-		ArrayList<String> hardFields = new ArrayList<String>();
-		ArrayList<String> negativeHardFields = new ArrayList<String>();
+		int estimatedGasPerYear = (int) (52 * kmperweek / AVG_GASOLINE_LITER_PER_KM * REGULAR_GASOLINE_PRICE);
+		int estimatedElectricPerYear = (int) (52 * kmperweek / AVG_ELECTRICITY_LITER_PER_KM * ELECTRICITY_PRICE);
+		int estimatedDieselPerYear = (int) (52 * kmperweek / AVG_DIESEL_LITER_PER_KM * DIESEL_PRICE);
+		int upFront = Integer.parseInt(budget);
+		String costG = String.format("cost:$%.2f",
+				((int) ((upFront - estimatedGasPerYear) / VehicleDiGraph.costIncrements))
+						* VehicleDiGraph.costIncrements);
+		String costE = String.format("cost:$%.2f",
+				((int) ((upFront - estimatedElectricPerYear) / VehicleDiGraph.costIncrements))
+						* VehicleDiGraph.costIncrements);
+		String costD = String.format("cost:$%.2f",
+				((int) ((upFront - estimatedDieselPerYear) / VehicleDiGraph.costIncrements))
+						* VehicleDiGraph.costIncrements);
+		softFields.add(costG);
+		softFields.add(costE);
+		softFields.add(costD);
 
 		Scanner fieldReader = new Scanner(wantFields).useDelimiter(";");
 		while (fieldReader.hasNext()) {
@@ -98,29 +119,53 @@ public class VehicleController {
 		Vehicle[] vs = VehicleDiGraph.searchVehicles(softFields.toArray(a), hardFields.toArray(b),
 				negativeHardFields.toArray(c));
 		VehicleJSON[] out = new VehicleJSON[vs.length];
+		CarImageThread[] imageGetters = new CarImageThread[vs.length];
 		for (int i = 0; i < out.length; i++) {
 			out[i] = vs[i].toJSON();
+			
+			
+			// Get the image from GOOGLE CUSTOM SEARCH
+			String q = "";
+			q = out[i].manufacturer + " " + out[i].model;
+			q = q.replaceAll("\\s+", "%20");
+			String link = "https://www.googleapis.com/customsearch/v1?q=" + q
+					+ "&cx=004748682743789405605%3Aswfov2xvt6m&key=AIzaSyDjU2ImybIvLHhibwboU2LiikSxxxzi8TI";
+			imageGetters[i] = new CarImageThread(link);
+			imageGetters[i].start(); // Start getting the image
 
-			String img;
-			try {
-				if (retreiveImage) {
-					// Get the image from GOOGLE CUSTOM SEARCH
-					String q = "";
-					q = out[i].manufacturer + " " + out[i].model;
-					q = q.replaceAll("\\s+", "%20");
-					JSONObject json = jsonGetter.getJSON("https://www.googleapis.com/customsearch/v1?q=" + q
-							+ "&cx=004748682743789405605%3Aswfov2xvt6m&key=AIzaSyDjU2ImybIvLHhibwboU2LiikSxxxzi8TI");
+			String fuel = out[i].fuelType;
+			out[i].image = "images/genericcar.jpg";
+			if (fuel.indexOf("electric") != -1) {
+				out[i].gasPerYear = (int) (52 * kmperweek / vs[i].kmPerLiter * ELECTRICITY_PRICE);
+			} else if (fuel.indexOf("Regular Gasoline") != -1) {
+				out[i].gasPerYear = (int) (52 * kmperweek / vs[i].kmPerLiter * REGULAR_GASOLINE_PRICE);
 
-					json = (json.getJSONArray("items")).getJSONObject(0);
-					img = (json.getJSONObject("pagemap").getJSONArray("cse_image").getJSONObject(0).getString("src"));
-				} else
-					img = "images/genericcar.jpg";
-			} catch (Exception e) {
-				img = "images/genericcar.jpg";
+			} else if (fuel.indexOf("Diesel") != -1) {
+				out[i].gasPerYear = (int) (52 * kmperweek / vs[i].kmPerLiter * DIESEL_PRICE);
+			} else {
+				out[i].gasPerYear = (int) (52 * kmperweek / vs[i].kmPerLiter * REGULAR_GASOLINE_PRICE);
 			}
-			out[i].image = img;
-			out[i].gasPerYear = (int) (52 * kmperweek / vs[i].kmPerLiter * 1.22);
 		}
+		boolean imagesGotten =  false;
+		double imageTime = System.currentTimeMillis();
+		while (!imagesGotten){
+			imagesGotten = true;
+			if (System.currentTimeMillis() - imageTime > 5000){
+				break; // Escape if the threads take too long
+			}
+			for (CarImageThread gett : imageGetters){
+				if (gett.isAlive()){
+					imagesGotten = false;
+					Thread.sleep(100);
+					break;
+				}
+			}
+		}
+		for (int i = 0; i < out.length; i++) {
+			out[i].image = imageGetters[i].img;
+			imageGetters[i].interrupt();
+		}
+		Arrays.sort(out);
 		return out;
 	}
 
