@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+import application.VehicleDiGraph;
+
 public class Vehicle {
 	public final String model;
 	public final String make;
@@ -29,7 +31,7 @@ public class Vehicle {
 		this.fuelType1 = "";
 		this.year = year;
 		Random r = new Random();
-		this.cost = 1000 + r.nextInt(19000);
+		this.cost = r.nextInt( (int) VehicleDiGraph.MAX_COST );
 		this.kmPerLiter = (7000.0 + r.nextInt(7000)) / (1000.0); // Gives a
 																	// random km
 																	// per liter

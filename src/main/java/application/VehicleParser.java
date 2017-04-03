@@ -1,4 +1,5 @@
 package application;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,13 +15,13 @@ public class VehicleParser {
 
 	/**
 	 * Reads the file and puts the Vehicles into an ordered list.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	public static void init() throws IOException {
 		allVehicles = new ArrayList<Vehicle>();
 
-
-		//ClassLoader classLoader = VehicleParser.class.getClassLoader();
+		// ClassLoader classLoader = VehicleParser.class.getClassLoader();
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		String f = classLoader.getResource("vehicles.csv").getFile();
 		f = f.replace("%20", " ");
@@ -29,18 +30,21 @@ public class VehicleParser {
 		reader.readNext(); // Skip header
 		while ((nextLine = reader.readNext()) != null) {
 			// Grab car information
-			String manufacturer = nextLine [26 + 20]; //AU MODEL 
-			String model = nextLine [26 + 21]; //AV MODEL 
-			String fuel = nextLine [31];
-			String year = nextLine [52 + 11];
+			String manufacturer = nextLine[26 + 20]; // AU MODEL
+			String model = nextLine[26 + 21]; // AV MODEL
+			String fuel = nextLine[31];
+			String year = nextLine[52 + 11];
 			VehicleDataPoint v = new VehicleDataPoint(model, manufacturer, fuel, year);
 			Vehicle ve = addVehicle(allVehicles, v);
-			//Vehicle ve = allVehicles.get(searchVehiclesIndex(allVehicles, v));
-			ve.addTag(nextLine [52 + 11 - 1]); //BK VEHICLE SIZE
-			ve.addTag("Year:" + year); //BK VEHICLE YEAR
-			ve.addTag(nextLine [52 + 6 - 1]); //BF TRANY
-			ve.addTag(nextLine [24]); //Y wheel drive
-			ve.addTag(fuel); //Y wheel drive
+			// Vehicle ve = allVehicles.get(searchVehiclesIndex(allVehicles,
+			// v));
+			ve.addTag(nextLine[52 + 11 - 1]); // BK VEHICLE SIZE
+			ve.addTag("Year:" + year); // BK VEHICLE YEAR
+			ve.addTag(nextLine[52 + 6 - 1]); // BF TRANY
+			ve.addTag(nextLine[24]); // Y wheel drive
+			ve.addTag(fuel.toLowerCase()); // Y wheel drive\
+			double mpg = Double.parseDouble(nextLine[15]);
+			ve.kmPerLiter = mpg * 0.425144;
 		}
 		reader.close();
 
@@ -51,15 +55,20 @@ public class VehicleParser {
 		reader.readNext(); // Skip header
 		while ((nextLine = reader.readNext()) != null) {
 			// Grab car information
-			String manufacturer = nextLine [2];
-			String model = nextLine [3];
-			String fuel = nextLine [10];
-			String year = nextLine [1];
+			String manufacturer = nextLine[2];
+			String model = nextLine[3];
+			String fuel = nextLine[10];
+			String year = nextLine[1];
 			VehicleDataPoint v = new VehicleDataPoint(model, manufacturer, fuel, year);
 			Vehicle ve = addVehicle(allVehicles, v);
-			ve.addTag("Year:" + year); //BK VEHICLE YEAR
-			ve.addTag(nextLine [8]);
+			ve.addTag("Year:" + year); // BK VEHICLE YEAR
+			ve.addTag(nextLine[8]);
 			ve.addTag(fuel.toLowerCase());
+			//System.out.println(nextLine[13]);
+			if (nextLine.equals("")) {
+				double literPer100km = Double.parseDouble(nextLine[13]);
+				ve.kmPerLiter = 100 / literPer100km;
+			}
 		}
 		reader.close();
 
@@ -71,11 +80,11 @@ public class VehicleParser {
 		reader.readNext(); // Skip header #2
 		while ((nextLine = reader.readNext()) != null) {
 			// Grab car information
-			String manufacturer = nextLine [1];
-			String model = nextLine [2];
-			String fuel = nextLine [7];
-			String year = nextLine [0];
-			switch (fuel){
+			String manufacturer = nextLine[1];
+			String model = nextLine[2];
+			String fuel = nextLine[7];
+			String year = nextLine[0];
+			switch (fuel) {
 			case "X":
 				fuel = "Regular Gasoline";
 				break;
@@ -93,28 +102,32 @@ public class VehicleParser {
 				break;
 			}
 			VehicleDataPoint v = new VehicleDataPoint(model, manufacturer, fuel, year);
-			
+
 			Vehicle ve = addVehicle(allVehicles, v);
-			ve.kmPerLiter = Double.parseDouble(nextLine [10]);
-			ve.addTag("Year:" + year); //BK VEHICLE YEAR
-			ve.addTag(nextLine [8]);
+			double literPer100km = Double.parseDouble(nextLine[10]);
+			ve.kmPerLiter = 100 / literPer100km;
+			ve.addTag("Year:" + year); // BK VEHICLE YEAR
+			ve.addTag(nextLine[8]);
 			ve.addTag(fuel.toLowerCase());
 		}
 		reader.close();
 
 		VehicleDiGraph.init();
 		for (Vehicle v : allVehicles) {
-			System.out.println(v);
+			//System.out.println(v);
 			VehicleDiGraph.createVehicle(v);
 		}
 	}
 
 	/**
-	 * Adds a vehicle to the list, using a binary insertion.
-	 * If the vehicle is already in the list, the VehicleDataPoint is instead added to the Vehicle.
-	 * @param v Vehicle data point to add.
+	 * Adds a vehicle to the list, using a binary insertion. If the vehicle is
+	 * already in the list, the VehicleDataPoint is instead added to the
+	 * Vehicle.
+	 * 
+	 * @param v
+	 *            Vehicle data point to add.
 	 */
-	public static Vehicle addVehicle(ArrayList <Vehicle> vehiclesList, VehicleDataPoint v) {
+	public static Vehicle addVehicle(ArrayList<Vehicle> vehiclesList, VehicleDataPoint v) {
 		int lo = 0;
 		int hi = vehiclesList.size() - 1;
 		int cp = 1;
@@ -129,11 +142,10 @@ public class VehicleParser {
 				break;
 		}
 		int mid = lo + (hi - lo) / 2;
-		if (cp == 0){
+		if (cp == 0) {
 			vehiclesList.get(mid).addData(v);
 			return vehiclesList.get(mid);
-		}
-		else {
+		} else {
 
 			Vehicle newV = new Vehicle(v);
 			if (vehiclesList.size() == 0)
@@ -148,10 +160,12 @@ public class VehicleParser {
 
 	/**
 	 * Finds the index of a Vehicle using a binary search.
-	 * @param v VehicleDataPoint to look for.
+	 * 
+	 * @param v
+	 *            VehicleDataPoint to look for.
 	 * @return Index of Vehicle.
 	 */
-	public static int searchVehiclesIndex(ArrayList <Vehicle> vehiclesList,VehicleDataPoint v) {
+	public static int searchVehiclesIndex(ArrayList<Vehicle> vehiclesList, VehicleDataPoint v) {
 		int lo = 0;
 		int hi = vehiclesList.size() - 1;
 		int cp = 1;

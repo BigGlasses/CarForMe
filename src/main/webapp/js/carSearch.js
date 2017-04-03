@@ -57,10 +57,10 @@ function updateHow(){
 	var budget = $('#budgetinput').val();
 	var travel = $('#travelinput').val();
 	if (travel == "") travel = 200;
+	if (budget == "") budget = 2000;
 	var t = $('#howmuch');
-	t.text("I have $" + budget + " to spend, and plan to drive around " + 52*parseInt(travel) + "km yearly.");
+	t.text("I have $" + budget + " to spend, and plan to drive around " + 52*parseInt(travel) + "km annually.");
 }
-updateHow();
 
 setInterval(reduceTags, 5000)
 
@@ -152,6 +152,7 @@ function doRequest(){
 }
 $('#budgetinput').val(2000);
 $('#travelinput').val(200);
+updateHow();
 doRequest();
 
 function jsUcfirst(string) 

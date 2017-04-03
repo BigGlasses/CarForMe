@@ -16,16 +16,16 @@ public class VehicleDiGraph {
 	private static Map<String, FieldNode> fieldDictionary;
 	private static ArrayList<String> fieldStrings;
 
-	public final static double costIncrements = 500;
-	public final static double maxCost = 25000;
+	public final static double COST_INCREMENTS = 500;
+	public final static double MAX_COST = 25000;
 
 	public static void init() {
 		fieldDictionary = new HashMap<String, FieldNode>();
 		fieldStrings = new ArrayList<String>();
-		for (int i = 0; i * costIncrements < maxCost; i++) {
-			FieldNode n = addField(String.format("cost:$%.2f", i * costIncrements));
+		for (int i = 0; i * COST_INCREMENTS < MAX_COST; i++) {
+			FieldNode n = addField(String.format("cost:$%.2f", i * COST_INCREMENTS));
 			if (i > 0)
-				connect(n, fieldDictionary.get(String.format("cost:$%.2f", (i - 1) * costIncrements)));
+				connect(n, fieldDictionary.get(String.format("cost:$%.2f", (i - 1) * COST_INCREMENTS)));
 		}
 	}
 
@@ -117,7 +117,7 @@ public class VehicleDiGraph {
 			connect(fieldDictionary.get(tag), v2);
 		}
 
-		String cost = String.format("cost:$%.2f", ((int) (v2.v.cost / costIncrements)) * costIncrements);
+		String cost = String.format("cost:$%.2f", ((int) (v2.v.cost / COST_INCREMENTS)) * COST_INCREMENTS);
 		connect(fieldDictionary.get(cost), v2);
 		return v2;
 	}
