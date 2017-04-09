@@ -7,12 +7,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 
-import application.VehicleParser;
+import input.VehicleParser;
 
 /**
- * 
+ *	This is the main class for the SpringBoot Application.
  * @author Brandon
- *	This is the main class for the SpringBoot Application
  */
 @SpringBootApplication
 public class ApplicationConfiguration extends SpringBootServletInitializer {

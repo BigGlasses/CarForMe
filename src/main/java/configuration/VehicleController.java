@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import application.CarImageThread;
 import application.VehicleDiGraph;
-import application.VehicleParser;
 import application.jsonGetter;
+import input.VehicleParser;
 import objects.FieldNode;
 import objects.Node;
 import objects.Vehicle;
@@ -26,6 +26,10 @@ import objects.VehicleDataPoint;
 import objects.VehicleJSON;
 import objects.VehicleNode;
 
+/**
+ * This controls the /vehicles endpoint.
+ * @author Brandon
+ */
 @Controller
 @RequestMapping("/vehicles")
 public class VehicleController {
@@ -44,7 +48,7 @@ public class VehicleController {
 
 	/**
 	 * Returns a random vehicle from the data set.
-	 * 
+	 * vehicles/randomVehicle endpoint.
 	 * @param name
 	 * @return
 	 */
@@ -57,6 +61,7 @@ public class VehicleController {
 
 	/**
 	 * Performs a breadth first search for a Vehicle using the VehicleDiGraph.
+	 * vehicles/search endpoint
 	 * 
 	 * @param manufacturer
 	 *            Car manufacturer
@@ -95,6 +100,12 @@ public class VehicleController {
 			kmperweek = 200;
 		else
 			kmperweek = Integer.parseInt(travelDistance);
+		 if (kmperweek <= 0){
+			 kmperweek = 0;
+		 }
+		 if (kmperweek >= 500){
+			 kmperweek = 500;
+		 }
 
 		int estimatedGasPerYear = (int) (52 * kmperweek / AVG_GASOLINE_LITER_PER_KM * REGULAR_GASOLINE_PRICE);
 		int estimatedElectricPerYear = (int) (52 * kmperweek / AVG_ELECTRICITY_LITER_PER_KM * ELECTRICITY_PRICE);
@@ -149,7 +160,7 @@ public class VehicleController {
 			
 			// Get the image from GOOGLE CUSTOM SEARCH
 			String q = "";
-			q = out[i].manufacturer + " " + out[i].model + "vehicle";
+			q = out[i].manufacturer + " " + out[i].model;
 			q = q.replaceAll("\\s+", "%20");
 			String link = "https://www.googleapis.com/customsearch/v1?q=" + q
 					+ "&cx=004748682743789405605%3Aswfov2xvt6m&key=AIzaSyDjU2ImybIvLHhibwboU2LiikSxxxzi8TI";
@@ -204,7 +215,7 @@ public class VehicleController {
 
 	/**
 	 * Returns all the connections for a given Field in VehicleDiGraph name.
-	 * 
+	 * vehicles/connections endpoint
 	 * @param fieldName
 	 *            String of field to get connections of.
 	 * @return List of connections.
@@ -220,13 +231,11 @@ public class VehicleController {
 		}
 		return vl;
 
-		// return
-		// VehicleParser.allVehicles.get(VehicleParser.searchVehiclesIndex(v)%VehicleParser.allVehicles.size());
 	}
 
 	/**
 	 * Returns all the connections for a given Field in VehicleDiGraph name.
-	 * 
+	 * vehicles/tags endpoint
 	 * @param fieldName
 	 *            String of field to get connections of.
 	 * @return List of connections.
@@ -236,8 +245,6 @@ public class VehicleController {
 		String[] tags = VehicleDiGraph.allFields();
 		return tags;
 
-		// return
-		// VehicleParser.allVehicles.get(VehicleParser.searchVehiclesIndex(v)%VehicleParser.allVehicles.size());
 	}
 
 }

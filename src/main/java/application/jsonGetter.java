@@ -8,6 +8,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Reads jsons from URLs.
+ * Found on stackoverflow.
+ * @author Brandon
+ *
+ */
 public class jsonGetter {
 	private static String readUrl(String urlString) throws Exception { // God
 																		// bless

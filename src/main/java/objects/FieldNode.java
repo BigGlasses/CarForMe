@@ -2,11 +2,20 @@ package objects;
 
 import java.util.ArrayList;
 
-import application.VehicleParser;
-
+import input.CarInputReader;
+import input.VehicleParser;
+/**
+ * Node containing search field information.
+ * @author Brandon
+ */
 public class FieldNode extends Node implements Comparable {
 	public final int maxDepth = 3;
 	ArrayList <Vehicle> vehicleChildren;
+	
+	/**
+	 * Creates a node with a string identifier.
+	 * @param s Identifier of the node.
+	 */
 	public FieldNode(String s) {
 		super(s.toLowerCase());
 		vehicleChildren = new ArrayList <Vehicle>();
@@ -52,7 +61,7 @@ public class FieldNode extends Node implements Comparable {
 	 * @return
 	 */
 	public void addVehicleChild(VehicleNode v){
-		VehicleParser.addVehicle(vehicleChildren, v.v.getDp());
+		CarInputReader.addVehicle(vehicleChildren, v.v.getDatapoint());
 	}
 	
 	/**
@@ -61,7 +70,7 @@ public class FieldNode extends Node implements Comparable {
 	 * @return
 	 */
 	public boolean checkVehicleChild(VehicleNode v){
-		int index = VehicleParser.searchVehiclesIndex(vehicleChildren, v.v.getDp());
+		int index = CarInputReader.searchVehiclesIndex(vehicleChildren, v.v.getDatapoint());
 		if (index < 0 || index >= vehicleChildren.size()){
 			return false;
 		}

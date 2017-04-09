@@ -1,5 +1,10 @@
 package objects;
 
+/**
+ * Simple representation of a vehicle for front end.
+ * @author Brandon
+ *
+ */
 public class VehicleJSON implements Comparable{
 	public String manufacturer;
 	public String model;

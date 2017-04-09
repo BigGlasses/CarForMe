@@ -6,6 +6,11 @@ import java.util.Random;
 
 import application.VehicleDiGraph;
 
+/**
+ * Contains unique vehicle information.
+ * @author Brandon
+ *
+ */
 public class Vehicle {
 	public final String model;
 	public final String make;
@@ -18,7 +23,7 @@ public class Vehicle {
 	private ArrayList<String> tags;
 
 	/**
-	 * C
+	 * Creates a Vehicle
 	 * 
 	 * @param model
 	 * @param mak
@@ -64,6 +69,34 @@ public class Vehicle {
 		return tags.toArray(new String[tags.size()]);
 	}
 
+
+
+	public String toString() {
+		return String.format("[%s] [%s] [%s] [$%.2f] %s", this.year + " " + this.make, this.model, this.fuelType, this.cost,
+				this.tags.toString());
+	}
+
+	public VehicleDataPoint getDatapoint() {
+		return this.dp.get(0);
+	}
+
+	/**
+	 * 
+	 * @return A JSON equivalent to this Vehicle Object.
+	 */
+	public VehicleJSON toJSON() {
+		VehicleJSON j = new VehicleJSON();
+		j.manufacturer = make;
+		j.model = model;
+		j.image = "";
+		j.cost = cost;
+		String[] tags = getTags();
+		Arrays.sort(tags);
+		j.tags = tags;
+		j.fuelType = this.fuelType;
+		return j;
+	}
+
 	public int compareTo(Vehicle v) {
 		if (greater(v.model, this.model.toLowerCase()))
 			return 1;
@@ -87,29 +120,7 @@ public class Vehicle {
 		} else
 			return -1;
 	}
-
-	public String toString() {
-		return String.format("[%s] [%s] [%s] [$%.2f] %s", this.year + " " + this.make, this.model, this.fuelType, this.cost,
-				this.tags.toString());
-	}
-
-	public VehicleDataPoint getDp() {
-		return this.dp.get(0);
-	}
-
-	public VehicleJSON toJSON() {
-		VehicleJSON j = new VehicleJSON();
-		j.manufacturer = make;
-		j.model = model;
-		j.image = "";
-		j.cost = cost;
-		String[] tags = getTags();
-		Arrays.sort(tags);
-		j.tags = tags;
-		j.fuelType = this.fuelType;
-		return j;
-	}
-
+	
 	public int compareTo(VehicleDataPoint v) {
 		if (greater(v.model, this.model.toLowerCase()) && !v.model.equals(""))
 			return 1;

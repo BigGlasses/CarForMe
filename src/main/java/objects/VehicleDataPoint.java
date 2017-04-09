@@ -1,5 +1,10 @@
 package objects;
 
+/**
+ * Contains temporary vehicle information.
+ * @author Brandon
+ *
+ */
 public class VehicleDataPoint {
 	public String model;
 	public String make;
