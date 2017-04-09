@@ -10,7 +10,9 @@
 3. [x] Back-end Application Ready
 4. [x] Front-End Deployed
 5. [x] Final Bug Fixes, No New Features
-6. [ ] Final Front and Back-End Deployment
+6. [x] Final Front and Back-End Deployment
+
+Thanks for your hard work everyone!
 
 ## Roles
 - Brandon @BigGlasses Brandon Project Leader
